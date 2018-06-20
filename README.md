@@ -4,7 +4,7 @@
 
 ## Description
 
-Delivery tracking application.
+Delivery tracking application for consumer packages.
 
 ## Installation
 
