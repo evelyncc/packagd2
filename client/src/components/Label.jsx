@@ -13,12 +13,12 @@ class Label extends Component {
   }
 
   render() {
-    const { handleAdd } = this.props;
+    const { parseLabel } = this.props;
     return (
       <div>
         <h2>Upload Label:</h2>
         <input type="text" className="label" size="40" placeholder="Enter image URL here" onChange={value => this.getInput(value)} />
-        <button onClick={() => handleAdd(this.state.label)} >Add</button>
+        <button onClick={() => parseLabel(this.state.label)} >Add</button>
       </div>
     );
   }

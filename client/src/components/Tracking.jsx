@@ -65,20 +65,25 @@ class Tracking extends Component {
 
   render() {
     return (
-      <div>
-        <span className="item">
+      <tr>
+      <td>
+        <span className="field">
           {this.props.number}
         </span>
-        <span className="fa fa-truck fa_custom fa-2x" />
-        <span className="item">
+        </td>
+        <td>
+        <span className="field">
           {this.linkCarrier(this.props.number)}
         </span>
-        <span className="item">
-          <button onClick={() => this.showStatus()} >Status</button>
-        </span>
+        </td>
+        <td>
+        <span className="field">
+          <span className="fa fa-truck fa_custom fa-2x" onClick={() => this.showStatus()} />
         {this.renderStatus()}
-      </div>
-    )
+        </span>
+      </td>
+      </tr>
+    );
   }
 }
 
