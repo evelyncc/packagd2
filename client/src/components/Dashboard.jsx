@@ -1,37 +1,29 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import TrackingListContainer from '../container/trackingListContainer';
 import AddTracking from './AddTracking';
 import Label from './Label';
-import Tracking from './Tracking';
 import Output from './Output';
 import GOOGLE_API_KEY from '../config/google';
 
 class Dashboard extends Component {
-  constructor() {
-    super();
-    this.state = {
-      trackingNumbers: [],
-      output: '',
-    };
+  constructor(props) {
+    super(props);
 
     this.parseLabel = this.parseLabel.bind(this);
     this.handleAddNumber = this.handleAddNumber.bind(this);
-    this.getNumbers = this.getNumbers.bind(this);
   }
 
   componentDidMount() {
-    this.getNumbers();
-  }
-
-  getNumbers() {
     axios.get('/tracking')
       .then(({ data }) => {
-        const numbers = [];
+        const trackingList = [];
         for (let index = 0; index < data.length; index += 1) {
-          numbers.push(data[index].trackingNumber);
+          trackingList.push(data[index].trackingNumber);
         }
-        this.setState({ trackingNumbers: numbers });
-      });
+        this.props.handleChangeTrackingList(trackingList);
+      })
+      .catch(error => console.log(error));
   }
 
   parseLabel(imageURL) {
@@ -80,35 +72,9 @@ class Dashboard extends Component {
       carrier,
     };
     axios.post('/add', params);
-    const newNumbers = this.state.trackingNumbers.slice();
+    const newNumbers = this.state.trackingList.slice();
     newNumbers.push(number);
-    this.setState({ trackingNumbers: newNumbers });
-  }
-
-  renderNumbers() {
-    if (this.state.trackingNumbers.length > 0) {
-      return (
-        <div>
-        <table width="100%">
-          <tbody>
-        <tr>
-          <th>Tracking Number</th>
-          <th>Carrier</th>
-          <th>Status</th>
-        </tr>
-          {this.state.trackingNumbers.map((item) => {
-            return (
-              <Tracking number={item} key={item} />
-            );
-          })}
-          </tbody>
-          </table>
-        </div>
-      );
-    }
-    return (
-      <div />
-    );
+    this.setState({ trackingList: newNumbers });
   }
 
   render() {
@@ -116,8 +82,6 @@ class Dashboard extends Component {
       <div>
         <div className="header">
           <span className="fa fa-envelope-o fa_custom" /> Packagd
-          
-
         </div>
         <div className="container">
           <div className="col">
@@ -126,12 +90,12 @@ class Dashboard extends Component {
             </div>
             <div className="item">
               <Label parseLabel={this.parseLabel} />
-              <Output output={this.state.output} handleAddNumber={this.handleAddNumber} />
+              {/* <Output output={this.state.output} handleAddNumber={this.handleAddNumber} /> */}
             </div>
           </div>
           <div className="col">
             <div className="item">
-              {this.renderNumbers()}
+              <TrackingListContainer />
             </div>
           </div>
         </div>
